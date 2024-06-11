@@ -30,7 +30,7 @@ export default function RootLayout() {
   }
 
   const addLabel = (labe1) =>{
-    setNotes([...labels1, label1])
+    setNotes([...labels1, labe1])
   }
   const minusLabel = (labe1)=>{
     setNotes(labels1.filter(n => n.id !== labe1.id))
