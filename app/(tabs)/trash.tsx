@@ -1,3 +1,4 @@
+
 import { ThemedView } from '@/components/ThemedView'
 import { StyledComponent } from 'nativewind'
 import React from 'react'
@@ -10,5 +11,6 @@ const trash = () => {
     </StyledComponent>
   )
 }
+
 
 export default trash
