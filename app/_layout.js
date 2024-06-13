@@ -8,6 +8,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import {NOTES, LABELS, TRASH} from '@/utils/dummy-data'
 import {useDataContext} from '@/utils/context'
+import Note from '@/model/Note';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -17,10 +18,11 @@ export default function RootLayout() {
 
   const [notes1, setNotes] = useState(NOTES)
   const [labels1, setLabels] = useState(LABELS)
-  const [trash1, setTrash] = useState(TRASH)
+  const [trashes1, setTrash] = useState(TRASH);
 
-  const addNote = (note1) =>{
-    setNotes([...notes1, note1])
+  const addNote = (id, content) =>{
+    const newNote = new Note(id, null, [], content, new Date(), null  )
+    setNotes((prevNotes) => [...prevNotes, newNote])
   }
   const minusNote = (note1)=>{
     setNotes(notes1.filter(n => n.id !== note1.id))
@@ -37,6 +39,17 @@ export default function RootLayout() {
   }
   const updateLabel = (labe1) => {
     setLabels(labels1.map(l => l.id === labe1.id ? labe1 : l));
+  }
+  const addTrash = (note) => {
+    setTrash([...trashes1, note]);
+  }
+ 
+  const minusTrash = (note) => {
+    setTrash(trashes1.filter(n => n.id !== note.id));
+  }
+ 
+  const updateTrash = (note) => {
+    setTrash(trashes1.map(n => n.id === note.id ? note : n));
   }
 
 
@@ -63,12 +76,17 @@ export default function RootLayout() {
     },
     labels:{
       value: labels1, addLabel, minusLabel, updateLabel
+    },
+    trashes:{
+      value: trashes1, addTrash, minusTrash, updateTrash
     }
   }}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="Menus" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
+        <Stack.Screen name='newNote'/>
+        <Stack.Screen name='editNote'/>
       </Stack>
     </ThemeProvider>
   </DataContext.Provider>

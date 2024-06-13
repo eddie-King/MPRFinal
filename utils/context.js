@@ -3,7 +3,7 @@ import {createContext, useContext} from 'react';
     notes: { value: [], addNote: (Note) => {}, minusNote: (Note) => {}, updateNote: (Note) => {}},
     labels: { value: [], addLabel: (Label) => {}, minusLabel: (Label) => {}, updateLabel: (Label) => {}},
     folders: { value: [], addFolder: (Folder) => {}, minusFolder: (Folder) => {}, updateFolder: (Folder) => {}},
-    trash: { value: [], addTrash: (Note) => {}, minusTrash: (Note) => {}, updateTrash: (Note) => {}},
+    trashes: { value: [], addTrash: (Note) => {}, minusTrash: (Note) => {}, updateTrash: (Note) => {}},
 });
 
 export function useDataContext() {
@@ -21,3 +21,6 @@ export function useLabels() {
 export function useFolders() {
     return useContext(DataContext).folders;
     }
+export function useTrash(){
+    return useContext(DataContext).trashes;
+}
