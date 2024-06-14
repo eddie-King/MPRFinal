@@ -31,7 +31,8 @@ const NewNote = () => {
       return
     }
     id = getId()
-    addNote(id,note)
+    const newNote1 = new Note(id, null, [], note, new Date(), null  )
+    addNote(newNote1)
     navigation.goBack()
   }
 

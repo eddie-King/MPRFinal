@@ -3,7 +3,7 @@ import { StyleSheet, ScrollView, View, TouchableOpacity, TextInput, Keyboard } f
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useNavigation } from '@react-navigation/native';
-import { useEffect, useState, useRef, Key} from 'react';
+import { useEffect, useState, useRef} from 'react';
 import { StyledComponent } from 'nativewind';
 import { Feather } from '@expo/vector-icons';
 import { useNotes, useLabels } from '@/utils/context';
@@ -64,34 +64,36 @@ export default function HomeScreen() {
     });
   }, [navigation, focus, searchText]);
 
-  function timeAgo(dateString){
-    const [datePart, timePart] = dateString.split(', ')
-    const [day, month, year] = datePart.split('/')
-    const [hours, minutes, seconds] = timePart.split(':')
-    const past = new Date(year, month - 1, day ,hours, minutes, seconds)
-    const now = new Date()
 
-    const secondsDiff = Math.floor((now-past) / 1000)
-    const minutesDiff = Math.floor(secondsDiff / 60)
-    const hoursDiff = Math.floor(minutesDiff / 60)
-    const daysDiff = Math.floor(hoursDiff / 24)
- 
-    if (daysDiff > 0){
-      return `${daysDiff} days ago`;
-    }else if(hoursDiff > 0){
-      return `${hoursDiff} hrs ago`
-    }else if(minutesDiff>0){
-      return `${minutesDiff} min ago`
-    }else{
-      return `${seconds} sec ago`
-    }
-  }
+    const timeAgo = (dateString) => {
+      const date = new Date(dateString);
+      const now = new Date();
+      const secondsDiff = Math.floor((now - date) / 1000);
+  
+      if (secondsDiff < 60) {
+        return `${secondsDiff} sec ago`;
+      }
+  
+      const minutesDiff = Math.floor(secondsDiff / 60);
+      if (minutesDiff < 60) {
+        return `${minutesDiff} min ago`;
+      }
+  
+      const hoursDiff = Math.floor(minutesDiff / 60);
+      if(hoursDiff<24){
+      return `${hoursDiff} hrs ago`;
+      }
+
+      const dayDiff = Math.floor(hoursDiff / 24)
+      return `${dayDiff} days ago`
+    };
+  
 
   const { value: notes, addNote, minusNote, updateNote } = useNotes();
   const { value: labels, addLabel, minusLabel, updateLabel} = useLabels()
 
 
-  console.log("Text: " + searchText)
+  console.log("Text: " + timeAgo(notes[1].updateAt))
   function filterNotes(notes, searchText){
     if (!searchText.trim()){
       return notes
@@ -123,7 +125,7 @@ export default function HomeScreen() {
          navigation.navigate("editNote",{
         param1: note
       })} component={TouchableOpacity} tw=' border-0 p-3 space-y-1'>
-        <StyledComponent component={ThemedText} tw='text-xs' type='subtitle'>{timeAgo(note.updateAt.toLocaleString())}</StyledComponent>
+        <StyledComponent component={ThemedText} tw='text-xs' type='subtitle'>{timeAgo(note.updateAt)}</StyledComponent>
         
         <StyledComponent component={ThemedView} tw='flex flex-row space-x-3  '>
         { note.labelIds.map((labelIds, index) =>(

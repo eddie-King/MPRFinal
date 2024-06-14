@@ -16,10 +16,10 @@ export default function TabTwoScreen() {
 
   return (
     <>
-    <Stack.Screen options={{ title: 'Labels',
+<Stack.Screen options={{ title: 'Labels',
         headerTitleStyle:{
           fontSize: 24,
-        }
+            }
 }} />
     <StyledComponent component={ThemedView}>
       <StyledComponent component={TextInput} 

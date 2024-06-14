@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-import {NOTES, LABELS, TRASH} from '@/utils/dummy-data'
+import {NOTES, LABELS, TRASH, COLORS} from '@/utils/dummy-data'
 import {useDataContext} from '@/utils/context'
 import Note from '@/model/Note';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -19,11 +19,12 @@ export default function RootLayout() {
   const [notes1, setNotes] = useState(NOTES)
   const [labels1, setLabels] = useState(LABELS)
   const [trashes1, setTrash] = useState(TRASH);
+  const [colors] = useState(COLORS)
 
-  const addNote = (id, content) =>{
-    const newNote = new Note(id, null, [], content, new Date(), null  )
+  const addNote = (newNote) =>{
     setNotes((prevNotes) => [...prevNotes, newNote])
   }
+
   const minusNote = (note1)=>{
     setNotes(notes1.filter(n => n.id !== note1.id))
   }
@@ -51,6 +52,10 @@ export default function RootLayout() {
   const updateTrash = (note) => {
     setTrash(trashes1.map(n => n.id === note.id ? note : n));
   }
+  const emptyTrash = () =>{
+    setTrash([])
+  }
+  
 
 
   const colorScheme = useColorScheme();
@@ -72,13 +77,16 @@ export default function RootLayout() {
   return (
   <DataContext.Provider value={{
     notes: {
-      value: notes1, addNote, minusNote, updateNote
+      value: notes1, addNote, minusNote, updateNote, setNotes
     },
     labels:{
       value: labels1, addLabel, minusLabel, updateLabel
     },
     trashes:{
-      value: trashes1, addTrash, minusTrash, updateTrash
+      value: trashes1, addTrash, minusTrash, updateTrash, emptyTrash
+    },
+    colors:{
+      value: colors
     }
   }}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
