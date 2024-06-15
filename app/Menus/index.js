@@ -8,7 +8,7 @@ import { StyledComponent } from 'nativewind';
 import { Feather } from '@expo/vector-icons';
 import { useNotes, useLabels } from '@/utils/context';
 import { useThemeColor } from '@/hooks/useThemeColor';
-
+import { Ionicons } from '@expo/vector-icons';
 
 export default function HomeScreen() {
   const [focus, setFocus] = useState(false)
@@ -128,13 +128,21 @@ export default function HomeScreen() {
         <StyledComponent component={ThemedText} tw='text-xs' type='subtitle'>{timeAgo(note.updateAt)}</StyledComponent>
         
         <StyledComponent component={ThemedView} tw='flex flex-row space-x-3  '>
-        { note.labelIds.map((labelIds, index) =>(
-        <StyledComponent key={index} component={ThemedView} tw='bg-slate-100 p-1 '>
+        { note.labelIds.map((labelid) =>{
+          const label = labels.find((label) => label.id === labelid);
+          if (label)
+              return (
+        <StyledComponent key={label.id} component={ThemedView} tw='bg-slate-100 p-1 '>
         
-            <StyledComponent component={ThemedText} tw='text-sm'>{labels[index].label}</StyledComponent>
-
+            <StyledComponent component={ThemedText} tw='text-sm'>{label.label}</StyledComponent>
+        
         </StyledComponent>
-        ))}
+              )
+})}
+
+
+
+
         </StyledComponent>
         
         <StyledComponent component={ThemedView}>

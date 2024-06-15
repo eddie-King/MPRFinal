@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import {NOTES, LABELS, TRASH, COLORS} from '@/utils/dummy-data'
 import {useDataContext} from '@/utils/context'
 import Note from '@/model/Note';
+import Label from '@/model/Label';
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
@@ -33,10 +34,11 @@ export default function RootLayout() {
   }
 
   const addLabel = (labe1) =>{
-    setNotes([...labels1, labe1])
+    const newLabel = new Label(labels1[labels1.length-1].id + 1, labe1)
+    setLabels((prev)=> [...prev, newLabel])
   }
   const minusLabel = (labe1)=>{
-    setNotes(labels1.filter(n => n.id !== labe1.id))
+    setLabels(labels1.filter(n => n.id !== labe1.id))
   }
   const updateLabel = (labe1) => {
     setLabels(labels1.map(l => l.id === labe1.id ? labe1 : l));
@@ -95,6 +97,7 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" />
         <Stack.Screen name='newNote'/>
         <Stack.Screen name='editNote'/>
+        <Stack.Screen name='manageLabel'/>
       </Stack>
     </ThemeProvider>
   </DataContext.Provider>

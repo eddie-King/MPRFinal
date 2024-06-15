@@ -20,5 +20,5 @@
     "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "app/Menus/index.js", "app/_layout.jsx", "app/Menus/_layout.js", "app/Menus/folder.js", "app/Menus/label.js", "app/Menus/trash.jsx", "app/+html.tsx", "app/+not-found.js", "app/newNote.jsx", "app/editNote.jsx"  ]
+, "app/Menus/index.js", "app/_layout.jsx", "app/Menus/_layout.js", "app/Menus/folder.js", "app/Menus/label.js", "app/Menus/trash.jsx", "app/+html.tsx", "app/+not-found.js", "app/newNote.jsx", "app/editNote.js"  ]
 }

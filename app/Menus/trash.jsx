@@ -31,31 +31,31 @@ const trash = () => {
     const dayDiff = Math.floor(hoursDiff / 24)
     return `${dayDiff} days ago`
   };
-  // const handleRestore = (note) => {
-  //  console.log(note)
-  // };
+  const handleRestore = (note) => {
+   console.log(note)
+  };
 
-  // const handleDelete = (note) => {
+  const handleDelete = (note) => {
    
-  // };
-  // const handleNotePress = (note) => {
-  //   Alert.alert(
-  //     '',
-  //     '',
-  //     [
-  //       {
-  //         text: 'Restore',
-  //         onPress: () => handleRestore(note),
-  //       },
-  //       {
-  //         text: 'Delete Permanently',
-  //         onPress: () => handleDelete(note),
-  //         style: 'destructive',
-  //       },
-  //     ],
-  //     { cancelable: true }
-  //   );
-  // };
+  };
+  const handleNotePress = (note) => {
+    Alert.alert(
+      '',
+      '',
+      [
+        {
+          text: 'Restore',
+          onPress: () => handleRestore(note),
+        },
+        {
+          text: 'Delete Permanently',
+          onPress: () => handleDelete(note),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   function restoreAll(){
     setNotes([...notes,...trashes])
@@ -97,7 +97,7 @@ const trash = () => {
         
         trashes.map(note=> (
       <StyledComponent key = {note.id} component={ThemedView} tw='flex border-0 content-center mt-7 shadow-xl rounded-2xl'>
-        <StyledComponent component={TouchableOpacity}  tw=' border-0 p-3 space-y-1'>
+        <StyledComponent component={TouchableOpacity} onPress={handleNotePress} tw=' border-0 p-3 space-y-1'>
         <StyledComponent component={ThemedText} tw='text-xs' type='subtitle'>{timeAgo(note.updateAt)}</StyledComponent>
         
         <StyledComponent component={ThemedView} tw='flex flex-row space-x-3  '>

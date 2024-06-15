@@ -27,7 +27,7 @@ const EditNote = () => {
   const inputRef = useRef(null);
   const {param1} = route.params
   const [text, setOnChangetext] = useState(param1.content)
-  const {value: notes, addNote, minusNote, updateNote} = useNotes();
+  const {value: notes, addNote, minusNote, updateNote, setNotes} = useNotes();
   const {value: trashes, addTrash, minusTrash, updateTrash} = useTrash()
   const {value: colors} = useColors()
   const [color, setColor] = useState(param1.color)
@@ -61,11 +61,6 @@ const EditNote = () => {
     updateNote(newNote)
   }
 
-  const newColorNote = new Note(param1.id, color, param1.labelIds, param1.content, new Date(), param1.isBookmarked  )
-  function updateColor(color){
-    setColor(color)
-    updateNote(newColorNote)
-  }
 
   const handleSubmit = (note) => {
     if (note.content.trim() === '') {
@@ -100,14 +95,16 @@ const EditNote = () => {
 }} />
     
         <StyledComponent component={View} tw='flex flex-row border-2 border-dashed space-x-3 p-2 m-5  ' >
-          {param1.labelIds.map((labelIds, index) => (
-            
-             <StyledComponent key={index} component={ThemedView} tw='bg-slate-100 p-1 '>
+          {param1.labelIds.map((labelIds) => {
+            const label = labels.find((label) => label.id === labelIds);
+            if (label) return (
+             <StyledComponent key={label.id} component={ThemedView} tw='bg-slate-100 p-1 '>
          
-             <StyledComponent component={ThemedText} tw='text-sm'>{labels[index].label}</StyledComponent>
+             <StyledComponent component={ThemedText} tw='text-sm'>{label.label}</StyledComponent>
              
          </StyledComponent>
-             ))}
+            )
+})}
         </StyledComponent>
 
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -139,22 +136,23 @@ const EditNote = () => {
           <FontAwesome5 onPress={onOpen} name="ellipsis-v" size={24} color="black" />
           </StyledComponent>
   
-  
-
-
-
       <Modalize ref={modalizeRef} snapPoint={400}>
         <StyledComponent component={ThemedView} tw=''>
         <StyledComponent component={ScrollView} tw='space-x-3 ml-5 pt-3' horizontal= {true} showsHorizontalScrollIndicator={false}>
+        <StyledComponent component={MaterialIcons}  onPress={() => {
+                                                     param1.color = null;
+                                                       updateNote((prevNote) => ({ ...prevNote, color: null }));
+                                                      }}  
+          name="dnd-forwardslash" tw='bottom-1 opacity-100' size={48} color="black" />
              {colors.map((color) =>{
               return(
                 <StyledComponent key={color} 
                 style={{backgroundColor: color}} 
-                onPress={()=> {updateColor(color)}}
+                onPress= {()=>{param1.color = color; updateNote((prevNote) => ({...prevNote,color}))}}
                 component={TouchableOpacity}
                 tw='flex border-0 rounded-full h-10 w-10 justify-center relative items-center'>
-                {color == null && <StyledComponent component={MaterialIcons} name="dnd-forwardslash" tw='' size={24} color="black" />}
-                {param1.color === color && <StyledComponent component={FontAwesome6} tw='absolute top-2 left-2' name="check" size={24} color="black" /> }
+                {color == 'none' && <StyledComponent component={MaterialIcons} name="dnd-forwardslash" tw='' size={24} color="black" />}
+                {param1.color === color && <StyledComponent component={FontAwesome6} tw='absolute top-2 left-2' name="check" size={24} color="white" /> }
                 </StyledComponent>
               )
              })}
@@ -162,14 +160,23 @@ const EditNote = () => {
         </StyledComponent>
         
         <StyledComponent component={View} tw='flex flex-row border-0 border-dashed space-x-3 p-2 m-2 ml-4  ' >
-          {param1.labelIds.map((labelIds, index) => (
-             <StyledComponent key={index} component={ThemedView} tw='bg-slate-100 p-1 '>
+
+
+          {param1.labelIds.map((labelIds) => {
+            const label = labels.find((label) => label.id === labelIds);
+            if (label)
+              return (
+             <StyledComponent key={label.id} component={ThemedView} tw='bg-slate-100 p-1 '>
         
-             <StyledComponent component={ThemedText} tw='text-sm'>{labels[index].label}</StyledComponent>
+             <StyledComponent component={ThemedText} tw='text-sm'>{label.label}</StyledComponent>
  
          </StyledComponent>
-             ))}
-          <StyledComponent component={TouchableOpacity} tw='bg-slate-100 p-1 '>
+              )
+})}
+
+
+
+          <StyledComponent component={TouchableOpacity} onPress={()=> navigation.navigate('manageLabel',{param: param1})} tw='bg-slate-100 p-1 '>
         
         <StyledComponent component={ThemedText} tw='text-sm'>+ Manage labels</StyledComponent>
 
